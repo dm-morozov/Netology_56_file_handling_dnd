@@ -175,10 +175,8 @@ a:hover {
 }
 
 .drag-placeholder {
-  height: 50px;
-  background: transparent;
-  border: 2px dashed #0079bf;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  transition: all 0.2s ease;
+    height: 40px;
+    background-color: rgba(0, 121, 191, 0.08);
+    border-radius: 6px;
+    margin: 5px 0;
 }
