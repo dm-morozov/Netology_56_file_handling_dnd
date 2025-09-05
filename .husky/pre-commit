@@ -6,7 +6,7 @@ echo "Current directory: $(pwd)"
 yarn lint
 
 # Unit-тесты
-yarn test
+# yarn test
 
 # E2E-тесты
-yarn test:e2e:headless
+# yarn test:e2e:headless

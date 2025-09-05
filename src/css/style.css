@@ -2,10 +2,9 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background: #ff9a9e;
-    color: #333; 
-    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f5f7;
+    color: #333;
 }
 
 /* Стили для заголовков */
@@ -16,31 +15,20 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
 /* Стили для ссылок */
 a {
-    color: #ff6f61;
+    color: #0079bf;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #d64550;
-}
-
-/* Стили для кнопок */
-button {
-    background-color: #ff6f61;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #d64550;
+    color: #0056b3;
 }
 
 /* Стили для контейнера */
@@ -50,270 +38,147 @@ button:hover {
     padding: 20px;
 }
 
-/* Стили для формы */
-.form {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-    padding: 32px 24px;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(255, 111, 97, 0.15);
-    max-width: 400px;
-    margin: 40px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Стили для элементов управления формы */
-.form-control {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* Стили для инпутов */
-.input {
-    padding: 12px 16px;
-    border: 1px solid #ff6f61;
-    border-radius: 8px;
-    font-size: 16px;
-    background: #fff;
-    transition: border-color 0.3s;
-    outline: none;
-}
-
-.input:focus {
-    border-color: #d64550;
-    box-shadow: 0 0 0 2px #ff9a9e44;
-}
-
-/* Стили для кнопок внутри формы */
-.form .btn {
-    width: 48%;
-    margin: 0 1%;
-    font-weight: 600;
-}
-
-.form > div:last-child {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.btn-popover {
-    margin: 30px auto;
-    display: block;
-}
-
-.popover {
-  background: #fff;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  border-radius: 6px;
-  width: 250px;
-  text-align: center;
-}
-
-.popover-title {
-    padding: .5rem .75rem;
-    background-color: #f7f7f7;
-    border-radius: 6px 6px 0 0;
-    border-bottom: 1px solid #ebebeb;
-    font-weight: bold;
-}
-
-.popover-content {
-    padding: .5rem .75rem;
-    color: #212529;
-}
-
-/* стрелка */
-.popover-arrow {
-  position: absolute;
-  bottom: -7px;
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 7px solid #ccc;
-}
-
-.popover-arrow::after {
-  content: "";
-  position: absolute;
-  top: -7px;
-  left: -6px;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #fff;
-}
-
-/* Стили для задачи со звездочкой CRUD */
-
-/* Контейнер */
-.container-short {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  font-family: 'Roboto', sans-serif;
-}
-
-/* Заголовок */
-.container-short h3 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* Кнопка добавить */
-.btn-add {
-  display: block;
-  margin: 0 auto 20px auto;
-}
-
-/* Таблица */
-.item-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.item-table th,
-.item-table td {
-  padding: 12px 10px;
-  border: 1px solid #ddd;
-  text-align: center;
-}
-
-.item-table th {
-  background-color: #f7f7f7;
-  font-weight: 600;
-}
-
-.item-table tr:nth-child(even) {
-  background-color: #fafafa;
-}
-
-/* Кнопки редактирования и удаления */
-.item-table .btn-edit,
-.item-table .btn-delete {
-  padding: 6px 10px;
-  margin: 0 2px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.item-table .btn-edit {
-  background-color: #4caf50;
-}
-
-.item-table .btn-edit:hover {
-  background-color: #3e8e41;
-}
-
-.item-table .btn-delete {
-  background-color: #f44336;
-}
-
-.item-table .btn-delete:hover {
-  background-color: #d32f2f;
-}
-
-/* Модалка */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
+#board {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  gap: 20px;
+  align-items: start;
 }
 
-.modal.hidden {
+.column {
+  background-color: #ebecf0;
+  border-radius: 8px;
+  padding: 10px;
+  width: 250px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.column h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  min-height: 50px;
+  border: 2px dashed transparent;
+  padding: 5px;
+  transition: border 0.3s ease;
+}
+
+.placeholder {
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.cards-container.dragover {
+  border: 2px dashed #0079bf;
+}
+
+.card {
+  position: relative;
+  background-color: white;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  transition: background-color 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 0 0 2px rgba(0, 121, 191, 0.5);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.add-card-button {
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 7px;
+}
+
+.add-card-button:hover {
+  background-color: #005ea2;
+}
+
+.delete-card, .edit-card {
+  position: absolute;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+  line-height: 1;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  display: none;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.edit-card {
+  right: 26px;
+}
+
+.delete-card {
+  right: 6px;
+}
+
+.card:hover .delete-card,
+.card:hover .edit-card {
+  display: block;
+}
+
+.delete-card:hover{
+  color: red;
+  background-color: white;
+}
+
+.edit-card:hover { 
+  color: #0079bf; 
+  background-color: white;
+}
+
+.edit-input {
+  width: 75%;
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #0079bf;
+  border-radius: 4px;
+  outline: none;
+}
+
+.edit-input:focus {
+  border-color: #005ea2;
+}
+
+.hide {
   display: none;
 }
 
-.modal-content {
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  width: 320px; /* чуть шире для отступов */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-}
-
-/* Лейблы */
-.modal-content label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 14px;
-  color: #333;
-  width: 100%; /* чтобы инпуты занимали всю ширину */
-}
-
-/* Поля ввода */
-.modal-content input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
+.drag-placeholder {
+  height: 50px;
+  background: transparent;
+  border: 2px dashed #0079bf;
   border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-  width: 100%; /* инпут теперь тянется на всю ширину label */
-  box-sizing: border-box; /* чтобы padding не увеличивал ширину */
-}
-
-.modal-content input:focus {
-  border-color: #ff6f61;
-  box-shadow: 0 0 0 2px #ff9a9e44;
-}
-
-/* Сообщения об ошибках */
-.error-name,
-.error-price {
-  color: #f44336;
-  font-size: 12px;
-  min-height: 16px;
-  margin-top: 2px;
-}
-
-/* Кнопки в модалке */
-.modal-content .btn-save,
-.modal-content .btn-cancel {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 8px;
-}
-
-.modal-content .btn-save {
-  background-color: #4caf50;
-  color: #fff;
-}
-
-.modal-content .btn-save:hover {
-  background-color: #3e8e41;
-}
-
-.modal-content .btn-cancel {
-  background-color: #f44336;
-  color: #fff;
-}
-
-.modal-content .btn-cancel:hover {
-  background-color: #d32f2f;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
 }
