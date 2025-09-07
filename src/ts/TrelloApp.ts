@@ -129,49 +129,14 @@ export default class TrelloApp {
         const editBtn = document.createElement("button");
         editBtn.textContent = "✎";
         editBtn.classList.add("edit-card");
-        editBtn.addEventListener("click", (_) =>
-          this.editCard(column.id, card.id),
-        );
+        editBtn.addEventListener("click", (_) => {
+          this.startCardEditing(cardElement, card);
+        });
         cardElement.append(editBtn);
 
         // Двойной клик для редактирования
         cardElement.addEventListener("dblclick", () => {
-          const cardContent = cardElement.querySelector("span");
-          if (!cardContent) return; // Проверка, что элемент существует
-
-          // Отключаем перетаскивание
-          cardElement.setAttribute("draggable", "false");
-
-          const input = document.createElement("input");
-          input.type = "text";
-          input.value = card.text;
-          input.classList.add("edit-input");
-
-          // заменяем span на input
-          cardElement.replaceChild(input, cardText);
-          input.focus();
-
-          // при потере фокуса сохраняем
-          const save = () => {
-            const newText = input.value.trim();
-            if (newText && newText !== card.text) {
-              card.text = newText;
-              this.saveState();
-            }
-            this.render();
-          };
-
-          input.addEventListener("blur", save);
-
-          // при нажатии Enter сохраняем
-          input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              save();
-            }
-            if (e.key === "Escape") {
-              this.render();
-            }
-          });
+          this.startCardEditing(cardElement, card);
         });
 
         // Drag события
@@ -209,15 +174,58 @@ export default class TrelloApp {
       const addCardButton = document.createElement("button");
       addCardButton.classList.add("add-card-button");
       addCardButton.textContent = "+ Добавить карточку";
-      addCardButton.addEventListener("click", () => this.showAddCardInput(columnElement, column.id));
+      addCardButton.addEventListener("click", () =>
+        this.showAddCardInput(columnElement, column.id),
+      );
       columnElement.append(addCardButton);
       this.board.append(columnElement);
     });
   }
 
+  private startCardEditing(cardElement: HTMLElement, card: Card) {
+    const cardContent = cardElement.querySelector("span");
+    if (!cardContent) return; // Проверка, что элемент существует
+
+    // Отключаем перетаскивание
+    cardElement.setAttribute("draggable", "false");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = card.text;
+    input.classList.add("edit-input");
+
+    // заменяем span на input
+    cardElement.replaceChild(input, cardContent);
+    input.focus();
+
+    // при потере фокуса сохраняем
+    const save = () => {
+      const newText = input.value.trim();
+      if (newText && newText !== card.text) {
+        card.text = newText;
+        this.saveState();
+      }
+      this.render();
+    };
+
+    input.addEventListener("blur", save);
+
+    // при нажатии Enter сохраняем
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        save();
+      }
+      if (e.key === "Escape") {
+        this.render();
+      }
+    });
+  }
+
   private showAddCardInput(columnElement: HTMLElement, columnId: string) {
     // находим кнопку добавления в нашей колонке
-    const addCardButton = columnElement.querySelector(".add-card-button") as HTMLElement;
+    const addCardButton = columnElement.querySelector(
+      ".add-card-button",
+    ) as HTMLElement;
     if (!addCardButton) return;
 
     // удаляем кнопку
@@ -235,7 +243,7 @@ export default class TrelloApp {
 
     // 3. создаем контейнер для кнопок
     const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("add-card-buttons-container")
+    buttonsContainer.classList.add("add-card-buttons-container");
 
     // 4. создаем кнопки add и cancel
     const addBtn = document.createElement("button");
@@ -258,7 +266,7 @@ export default class TrelloApp {
     const cleanup = () => {
       newCardForm.remove();
       addCardButton.style.display = "block";
-    }
+    };
 
     // 8. Добавляем обработчики событий на кнопки и формы
     addBtn.addEventListener("click", () => {
@@ -269,15 +277,15 @@ export default class TrelloApp {
         cleanup();
       }
     });
-    
+
     cancelBtn.addEventListener("click", () => {
       cleanup();
     });
-    
+
     inputForNewCard.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         const cardText = inputForNewCard.value.trim();
-        if(cardText) {
+        if (cardText) {
           console.log(`Создаем карточку с текстом: ${cardText}`);
           this.createAndAddCard(columnElement, cardText, columnId);
           cleanup();
@@ -285,12 +293,16 @@ export default class TrelloApp {
       } else if (event.key === "Escape") {
         cleanup();
       }
-    })
+    });
   }
 
-  private createAndAddCard(columnElement: HTMLElement, cardText: string, columnId: string) {
+  private createAndAddCard(
+    columnElement: HTMLElement,
+    cardText: string,
+    columnId: string,
+  ) {
     if (cardText) {
-      const column = this.state.find(col => col.id === columnId);
+      const column = this.state.find((col) => col.id === columnId);
       console.log(column); // ок нашел то, что нужно
 
       // теперь нужно создать новый объект с карточкой и добавить его в колонку
@@ -315,7 +327,6 @@ export default class TrelloApp {
     }
   }
 
-
   private deleteCard(columnId: string, cardId: string) {
     console.log(columnId, cardId);
 
@@ -324,21 +335,6 @@ export default class TrelloApp {
     if (!column) return;
     column.cards = column.cards.filter((card) => card.id !== cardId);
 
-    this.render();
-    this.saveState();
-  }
-
-  private editCard(columnId: string, cardId: string) {
-    const column = this.state.find((col) => col.id === columnId);
-    if (!column) return;
-
-    const card = column.cards.find((card) => card.id === cardId);
-    if (!card) return;
-
-    const newText = prompt("Введите новый текст карточки", card.text);
-    if (!newText || newText === card.text || newText.trim() === "") return;
-
-    card.text = newText;
     this.render();
     this.saveState();
   }
