@@ -5,6 +5,7 @@ export default class TrelloApp {
   private board: HTMLElement;
   private state: Column[];
   private placeholder: HTMLElement; // Добавляем динамический плейсхолдер по заданию
+  private draggingCardHeight: number = 0;
 
   constructor(boardId: string = "board") {
     console.log("TrelloApp started");
@@ -52,7 +53,7 @@ export default class TrelloApp {
 
       const columnTitle = document.createElement("h3");
       columnTitle.textContent = column.title;
-      columnElement.appendChild(columnTitle);
+      columnElement.append(columnTitle);
 
       // Добавляем контейнер для карточек
       const cardsContainer = document.createElement("div");
@@ -64,7 +65,7 @@ export default class TrelloApp {
         const emptyPlaceholder = document.createElement("div");
         emptyPlaceholder.classList.add("placeholder");
         emptyPlaceholder.textContent = "Перетащите карточку сюда";
-        cardsContainer.appendChild(emptyPlaceholder);
+        cardsContainer.append(emptyPlaceholder);
       }
 
       column.cards.forEach((card) => {
@@ -113,7 +114,7 @@ export default class TrelloApp {
         // текст карточки
         const cardText = document.createElement("span");
         cardText.textContent = card.text;
-        cardElement.appendChild(cardText);
+        cardElement.append(cardText);
 
         // кнопка удаления
         const deleteBtn = document.createElement("button");
@@ -122,7 +123,7 @@ export default class TrelloApp {
         deleteBtn.addEventListener("click", (_) =>
           this.deleteCard(column.id, card.id),
         );
-        cardElement.appendChild(deleteBtn);
+        cardElement.append(deleteBtn);
 
         // кнопка редактирования
         const editBtn = document.createElement("button");
@@ -131,10 +132,16 @@ export default class TrelloApp {
         editBtn.addEventListener("click", (_) =>
           this.editCard(column.id, card.id),
         );
-        cardElement.appendChild(editBtn);
+        cardElement.append(editBtn);
 
         // Двойной клик для редактирования
         cardElement.addEventListener("dblclick", () => {
+          const cardContent = cardElement.querySelector("span");
+          if (!cardContent) return; // Проверка, что элемент существует
+
+          // Отключаем перетаскивание
+          cardElement.setAttribute("draggable", "false");
+
           const input = document.createElement("input");
           input.type = "text";
           input.value = card.text;
@@ -175,6 +182,10 @@ export default class TrelloApp {
           );
           cardElement.classList.add("dragging");
 
+          // Сохраняем высоту перетаскиваемой области
+          this.draggingCardHeight = cardElement.offsetHeight;
+          this.placeholder.style.height = `${this.draggingCardHeight}px`;
+
           // нельзя прятать сразу,
           // браузер сначала делает снимок для ghost.
           // Поэтому используем setTimeout
@@ -184,47 +195,126 @@ export default class TrelloApp {
         cardElement.addEventListener("dragend", () => {
           cardElement.classList.remove("dragging", "hide");
           this.removePlaceholder();
+
+          // Сбрасываем высоту плейсхолдера после завершения перетаскивания
+          this.placeholder.style.height = "";
         });
 
-        cardsContainer.appendChild(cardElement);
+        cardsContainer.append(cardElement);
       });
 
-      columnElement.appendChild(cardsContainer);
+      columnElement.append(cardsContainer);
 
       // кнопка добавления карточки
       const addCardButton = document.createElement("button");
       addCardButton.classList.add("add-card-button");
       addCardButton.textContent = "+ Добавить карточку";
-      addCardButton.addEventListener("click", () => this.addCard(column.id));
-      columnElement.appendChild(addCardButton);
-      this.board.appendChild(columnElement);
+      addCardButton.addEventListener("click", () => this.showAddCardInput(columnElement, column.id));
+      columnElement.append(addCardButton);
+      this.board.append(columnElement);
     });
+  }
+
+  private showAddCardInput(columnElement: HTMLElement, columnId: string) {
+    // находим кнопку добавления в нашей колонке
+    const addCardButton = columnElement.querySelector(".add-card-button") as HTMLElement;
+    if (!addCardButton) return;
+
+    // удаляем кнопку
+    addCardButton.style.display = "none";
+
+    // 1. создаю новый контейней для формы добавления карточки
+    const newCardForm = document.createElement("div");
+    newCardForm.classList.add("add-card-form");
+
+    // 2. создаю поле ввода
+    const inputForNewCard = document.createElement("input");
+    inputForNewCard.type = "text";
+    inputForNewCard.placeholder = "Введите текст карточки...";
+    inputForNewCard.classList.add("input-for-new-card");
+
+    // 3. создаем контейнер для кнопок
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("add-card-buttons-container")
+
+    // 4. создаем кнопки add и cancel
+    const addBtn = document.createElement("button");
+    addBtn.textContent = "Добавить карточку";
+    addBtn.classList.add("add-card-btn-ok");
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "✖";
+    cancelBtn.classList.add("add-card-btn-cancel");
+
+    // 5. Собираем элементы и добавляем в колонку
+    buttonsContainer.append(addBtn, cancelBtn);
+    newCardForm.append(inputForNewCard, buttonsContainer);
+    columnElement.append(newCardForm);
+
+    // 6. Чтобы сразу можно было печатать в поле ввода, нужно input дать фокус
+    inputForNewCard.focus();
+
+    // 7. создаем сброс нашей формы, она должна сбрасываться в пяти случаях
+    const cleanup = () => {
+      newCardForm.remove();
+      addCardButton.style.display = "block";
+    }
+
+    // 8. Добавляем обработчики событий на кнопки и формы
+    addBtn.addEventListener("click", () => {
+      const cardText = inputForNewCard.value.trim();
+      if (cardText) {
+        console.log(`Создаем карточку с текстом: ${cardText}`);
+        this.createAndAddCard(columnElement, cardText, columnId);
+        cleanup();
+      }
+    });
+    
+    cancelBtn.addEventListener("click", () => {
+      cleanup();
+    });
+    
+    inputForNewCard.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const cardText = inputForNewCard.value.trim();
+        if(cardText) {
+          console.log(`Создаем карточку с текстом: ${cardText}`);
+          this.createAndAddCard(columnElement, cardText, columnId);
+          cleanup();
+        }
+      } else if (event.key === "Escape") {
+        cleanup();
+      }
+    })
+  }
+
+  private createAndAddCard(columnElement: HTMLElement, cardText: string, columnId: string) {
+    if (cardText) {
+      const column = this.state.find(col => col.id === columnId);
+      console.log(column); // ок нашел то, что нужно
+
+      // теперь нужно создать новый объект с карточкой и добавить его в колонку
+      const newCard: Card = {
+        id: Date.now().toString(),
+        text: cardText,
+      };
+
+      // добавляем карточку в массив cards
+      column?.cards.push(newCard);
+
+      // рендерим и сохраняем в state
+      this.render();
+      this.saveState();
+    }
   }
 
   // Метод для удаления плейсхолдера
   private removePlaceholder() {
     if (this.placeholder.parentElement) {
-      this.placeholder.parentElement.removeChild(this.placeholder);
+      this.placeholder.remove();
     }
   }
 
-  private addCard(columnID: string) {
-    const text = prompt("Введите текст карточки");
-
-    if (!text) return;
-
-    const newCard: Card = {
-      id: Date.now().toString(),
-      text,
-    };
-
-    const column = this.state.find((col) => col.id === columnID)!;
-    console.log(column);
-    column.cards.push(newCard);
-
-    this.render();
-    this.saveState();
-  }
 
   private deleteCard(columnId: string, cardId: string) {
     console.log(columnId, cardId);

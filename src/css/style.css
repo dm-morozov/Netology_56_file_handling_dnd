@@ -180,3 +180,65 @@ a:hover {
     border-radius: 6px;
     margin: 5px 0;
 }
+
+.add-card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: white;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 7px;
+}
+
+.input-for-new-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.input-for-new-card:focus {
+    outline: none;
+    border-color: #0079bf;
+}
+
+.add-card-buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-card-btn-ok {
+    background-color: #0079bf;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-card-btn-ok:hover {
+    background-color: #005ea2;
+}
+
+.add-card-btn-cancel {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.add-card-btn-cancel:hover {
+    color: #e55353;
+    background-color: rgba(229, 83, 83, 0.1);
+}
