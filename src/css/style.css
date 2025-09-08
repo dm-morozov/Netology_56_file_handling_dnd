@@ -84,6 +84,7 @@ a:hover {
 }
 
 .card {
+  font-size: 14px;
   position: relative;
   background-color: white;
   border-radius: 6px;

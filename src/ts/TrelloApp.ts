@@ -25,10 +25,26 @@ export default class TrelloApp {
             { id: "1", text: "Сделать домашку" },
             { id: "2", text: "Купить продукты" },
             { id: "3", text: "Погулять перед сном" },
+            { id: "5", text: "Добавляем новую задачу" },
           ],
         },
-        { id: "in-progress", title: "In progress", cards: [] },
-        { id: "done", title: "Done", cards: [] },
+        {
+          id: "in-progress",
+          title: "In progress",
+          cards: [{ id: "4", text: "Погулять с собакой" }],
+        },
+        {
+          id: "done",
+          title: "Done",
+          cards: [
+            { id: "6", text: "Почистить зубы" },
+            { id: "7", text: "Редактировать старую задачу" },
+            {
+              id: "8",
+              text: "Создаем очень большую карточку, чтобы понять размеры placehoder",
+            },
+          ],
+        },
       ];
     }
 
